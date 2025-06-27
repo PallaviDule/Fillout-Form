@@ -2,25 +2,16 @@ import {MdInsertDriveFile, MdMoreVert} from 'react-icons/md';
 import FormTabs from './FormTabs';
 import TabMenu from './TabMenu';
 import { useTabContext } from '../context/useTabContext';
+import { useState } from 'react';
+import AddNewPage from './AddNewPage';
 
 function App() {
+  const [showDialog, setShowDialog] = useState(false);
+
   const {state, dispatch} = useTabContext();
   const tabs = state.tabs;
   const activeTabId = state.activeTabId;
   const menuOpenTabId = state.menuOpenTabId;
-
-  const handleAddPage = () => {
-    const newId = (state.tabs.length + 1).toString();
-    const newPage = {
-      id: newId,
-      title: 'New Page',
-      icon: MdInsertDriveFile,
-    };
-
-    dispatch({type: 'ADD_TAB', payload: {newPage} });
-    dispatch({type: 'SET_ACTIVE_TAB', payload: {id: newId}})
-  }
-
 
   const handleToggleMenu = (id: string) => {
       const isMenuOpen = state.menuOpenTabId === id;
@@ -57,11 +48,16 @@ function App() {
           </div>
         )}
         <button
-              onClick={handleAddPage}
-              className="p-2 m-3 rounded-md border border-b-0 bg-green-600 text-white hover:bg-green-700 select-none"
-            >
-              + Add Page
-            </button>
+            onClick={() => setShowDialog(true)}
+            className="p-2 m-3 rounded-md border border-b-0 bg-blue-500 text-white hover:bg-blue-700 select-none"
+          >
+            + Add Page
+        </button>
+
+        <AddNewPage 
+          showDialog={showDialog}
+          onClose={() => setShowDialog(false)}
+        />
       </div>
     </>
   )
