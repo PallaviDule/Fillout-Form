@@ -20,6 +20,17 @@ function App() {
     dispatch({type: 'ADD_TAB', payload: {newPage} });
     dispatch({type: 'SET_ACTIVE_TAB', payload: {id: newId}})
   }
+
+
+  const handleToggleMenu = (id: string) => {
+      const isMenuOpen = state.menuOpenTabId === id;
+
+    if (isMenuOpen) {
+      dispatch({ type: 'CLOSE_MENU' });
+    } else {
+      dispatch({ type: 'OPEN_MENU', payload: { id } });
+    }
+  };
   
   return (
     <>
@@ -38,7 +49,7 @@ function App() {
               <div className='flex items-center p-1'>
                 <MdMoreVert 
                           size={18} 
-                          onClick={() =>  dispatch({type: 'OPEN_MENU', payload: {id: tab.id}})}/>
+                          onClick={() => handleToggleMenu(tab.id)}/>
               </div>}
             {(menuOpenTabId === tab.id && tab.id === activeTabId) && (
               <TabMenu/>
