@@ -5,6 +5,7 @@ export type Action =
   | { type: 'SET_ACTIVE_TAB'; payload: { id: string } }
   | { type: 'DELETE_ACTIVE_TAB'; payload: { id: string } }
   | { type: 'RENAME_ACTIVE_TAB'; payload: { id: string, newTitle: string } }
+  | { type: 'REORDER_TABS'; payload: { tabs: Page[] } }
   | { type: 'CLOSE_MENU'}
   | { type: 'OPEN_MENU'; payload: { id: string }};
 
@@ -14,6 +15,7 @@ type ReducerMap = {
   SET_ACTIVE_TAB: (state: TabState, payload: { id: string }) => TabState;
   DELETE_ACTIVE_TAB: (state: TabState, payload: { id: string }) => TabState;
   RENAME_ACTIVE_TAB: (state: TabState, payload: { id: string, newTitle: string }) => TabState;
+  REORDER_TABS: (state: TabState, payload: { tabs: Page[] }) => TabState;
   CLOSE_MENU: (state: TabState) => TabState;
   OPEN_MENU: (state: TabState, payload: { id: string }) => TabState;
 };
@@ -42,14 +44,16 @@ const reducerMap : ReducerMap = {
       }
   },
   RENAME_ACTIVE_TAB: (state: TabState, {id, newTitle}): TabState => {
-    console.log('Rename:', newTitle);
      const updatedTabs = state.tabs.map((tab) =>  tab.id === id ? {...tab, title: newTitle} : tab);
-      console.log('updated:', updatedTabs);
       return  {
         ...state,
         tabs: updatedTabs
       }
   },
+  REORDER_TABS: (state: TabState, payload) => ({
+    ...state,
+    tabs: payload.tabs
+  }),
   CLOSE_MENU : (state: TabState): TabState => {
     return  {
       ...state,
@@ -74,6 +78,8 @@ export function tabReducer(state: TabState, action: Action): TabState {
       return reducerMap.DELETE_ACTIVE_TAB(state, action.payload);
     case 'RENAME_ACTIVE_TAB':
       return reducerMap.RENAME_ACTIVE_TAB(state, action.payload);
+    case 'REORDER_TABS':
+      return reducerMap.REORDER_TABS(state, action.payload);
     case 'CLOSE_MENU':
       return reducerMap.CLOSE_MENU(state);
     case 'OPEN_MENU':

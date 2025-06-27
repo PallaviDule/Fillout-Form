@@ -20,8 +20,6 @@ const TabMenu = () => {
   const handleRename = () => {
 
     if (newTitle.trim() !== '' && currentTab?.title !== newTitle.trim()) {
-              console.log('Rename handler:', newTitle);
-
       dispatch({ type: 'RENAME_ACTIVE_TAB', payload: { id: activeTabId, newTitle: newTitle.trim() } });
     }
     setIsRenaming(false);

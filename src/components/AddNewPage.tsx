@@ -31,7 +31,7 @@ const AddNewPage = ({showDialog, onClose}: AddNewPageDialogProps) => {
 
   return (        
     <div className="fixed inset-0 flex justify-center items-start pt-50 z-20">
-      <div className="bg-white p-4 rounded-md shadow-xl w-150">
+      <div className="bg-white p-4 rounded-md shadow-xl w-150 border border-gray-50">
         <div className='justify-between flex'>
             <h2 className="text-lg font-semibold mb-2">Name your form page</h2>
             <MdClose

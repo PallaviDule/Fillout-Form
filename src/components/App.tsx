@@ -1,9 +1,10 @@
-import {MdInsertDriveFile, MdMoreVert} from 'react-icons/md';
+import {MdMoreVert} from 'react-icons/md';
 import FormTabs from './FormTabs';
 import TabMenu from './TabMenu';
 import { useTabContext } from '../context/useTabContext';
 import { useState } from 'react';
 import AddNewPage from './AddNewPage';
+import { ReactSortable } from 'react-sortablejs';
 
 function App() {
   const [showDialog, setShowDialog] = useState(false);
@@ -27,8 +28,15 @@ function App() {
     <>
       <div className='font-bold'> Fillout Forms</div>
       <div className='flex'>
+        <ReactSortable
+          tag="div"
+          className="flex"
+          list={tabs}
+          setList={(newTabs) => dispatch({ type: 'REORDER_TABS', payload: { tabs: newTabs } })}
+        >         
         {tabs.map((tab) => 
           <div 
+            key={tab.id}
             className={`relative flex border border-gray-200 p-2 rounded-md m-3 ${tab.id === activeTabId ? 'bg-white' : ' bg-gray-200 text-gray-500'} hover:bg-gray-300 cursor-pointer`}
             > 
             <FormTabs 
@@ -46,7 +54,8 @@ function App() {
               <TabMenu/>
             )}
           </div>
-        )}
+        )}</ReactSortable>
+
         <button
             onClick={() => setShowDialog(true)}
             className="p-2 m-3 rounded-md border border-b-0 bg-blue-500 text-white hover:bg-blue-700 select-none"
