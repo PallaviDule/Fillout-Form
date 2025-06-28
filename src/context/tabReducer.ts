@@ -2,6 +2,7 @@ import type { Page, TabState } from "./TabContext";
 
 export type Action =
   | { type: 'ADD_TAB'; payload: { newPage: Page } }
+  | { type: 'INSERT_TAB_AT'; payload: { newPage: Page, index: number } }
   | { type: 'SET_ACTIVE_TAB'; payload: { id: string } }
   | { type: 'DELETE_ACTIVE_TAB'; payload: { id: string } }
   | { type: 'RENAME_ACTIVE_TAB'; payload: { id: string, newTitle: string } }
@@ -12,6 +13,7 @@ export type Action =
 
 type ReducerMap = {
   ADD_TAB: (state: TabState, payload: { newPage: Page }) => TabState;
+  INSERT_TAB_AT: (state: TabState, payload: { newPage: Page, index: number }) => TabState;
   SET_ACTIVE_TAB: (state: TabState, payload: { id: string }) => TabState;
   DELETE_ACTIVE_TAB: (state: TabState, payload: { id: string }) => TabState;
   RENAME_ACTIVE_TAB: (state: TabState, payload: { id: string, newTitle: string }) => TabState;
@@ -28,6 +30,19 @@ const reducerMap : ReducerMap = {
       activeTabId: newPage.id,
       pageCount: state.pageCount + 1,
     };
+  },
+  INSERT_TAB_AT: (state, {newPage, index}) => {
+    const newTabs = [
+      ...state.tabs.slice(0,index),
+      newPage,
+      ...state.tabs.slice(index)
+    ];
+    return {
+      ...state,
+      tabs: newTabs,
+      activeTabId: newPage.id,
+      pageCount: state.pageCount + 1,
+    }
   },
   SET_ACTIVE_TAB: (state: TabState, {id}): TabState => {
     return {
@@ -72,6 +87,8 @@ export function tabReducer(state: TabState, action: Action): TabState {
   switch (action.type) {
     case 'ADD_TAB':
       return reducerMap.ADD_TAB(state, action.payload);
+    case 'INSERT_TAB_AT': 
+      return reducerMap.INSERT_TAB_AT(state, action.payload);
     case 'SET_ACTIVE_TAB':
       return reducerMap.SET_ACTIVE_TAB(state, action.payload);
     case 'DELETE_ACTIVE_TAB':

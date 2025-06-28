@@ -5,9 +5,10 @@ import {MdInsertDriveFile, MdClose} from 'react-icons/md';
 interface AddNewPageDialogProps {
   showDialog: boolean;
   onClose: () => void;
+  insertIndex?: number; 
 }
 
-const AddNewPage = ({showDialog, onClose}: AddNewPageDialogProps) => {
+const AddNewPage = ({showDialog, onClose, insertIndex}: AddNewPageDialogProps) => {
     const {state, dispatch} = useTabContext();
     const [newTabTitle, setNewTabTitle] = useState<string>('');
 
@@ -16,16 +17,21 @@ const AddNewPage = ({showDialog, onClose}: AddNewPageDialogProps) => {
     const tabs = state.tabs;
 
     const handleAddPage = () => {
+         if (!newTabTitle.trim()) return;
+          
         const newId = (tabs.length + 1).toString();
-         if (newTabTitle.trim()) {
-            const newTab = {
-                id: newId,
-                title: newTabTitle.trim(),
-                icon: MdInsertDriveFile,
-            };
-            dispatch({ type: 'ADD_TAB', payload: { newPage: newTab } });
-            setNewTabTitle('');
+        const newTab = {
+            id: newId,
+            title: newTabTitle.trim(),
+            icon: MdInsertDriveFile,
+        };
+        console.log('In add dialog:', insertIndex);
+        if(insertIndex) {
+          dispatch({ type: 'INSERT_TAB_AT', payload: { newPage: newTab, index: insertIndex} });
+        } else {
+          dispatch({ type: 'ADD_TAB', payload: { newPage: newTab } });
         }
+        setNewTabTitle('');
         onClose();
     };
 

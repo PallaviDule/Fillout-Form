@@ -8,6 +8,8 @@ import { ReactSortable } from 'react-sortablejs';
 
 function App() {
   const [showDialog, setShowDialog] = useState(false);
+  const [insertIndex, setInsertIndex] = useState<number | undefined>(undefined);
+
 
   const {state, dispatch} = useTabContext();
   const tabs = state.tabs;
@@ -23,10 +25,14 @@ function App() {
       dispatch({ type: 'OPEN_MENU', payload: { id } });
     }
   };
+
+  const openNewPageDialog = (index: number) => {
+    setInsertIndex(index);
+    setShowDialog(true);
+  };
   
   return (
     <>
-      <div className='font-bold'> Fillout Forms</div>
       <div className='flex'>
         <ReactSortable
           tag="div"
@@ -34,25 +40,32 @@ function App() {
           list={tabs}
           setList={(newTabs) => dispatch({ type: 'REORDER_TABS', payload: { tabs: newTabs } })}
         >         
-        {tabs.map((tab) => 
-          <div 
-            key={tab.id}
-            className={`relative flex border border-gray-200 p-2 rounded-md m-3 ${tab.id === activeTabId ? 'bg-white' : ' bg-gray-200 text-gray-500'} hover:bg-gray-300 cursor-pointer`}
-            > 
-            <FormTabs 
-              Icon={tab.icon} 
-              onClick={() => dispatch({type: 'SET_ACTIVE_TAB', payload: {id: tab.id}})}
-              />
-            <span onClick={() => dispatch({type: 'SET_ACTIVE_TAB', payload: {id: tab.id}})}>{tab.title} </span>  
-            {tab.id === activeTabId &&  
-              <div className='flex items-center p-1'>
-                <MdMoreVert 
-                          size={18} 
-                          onClick={() => handleToggleMenu(tab.id)}/>
-              </div>}
-            {(menuOpenTabId === tab.id && tab.id === activeTabId) && (
-              <TabMenu/>
-            )}
+        {tabs.map((tab, index) => 
+            <div key={tab.id} className='flex '> 
+              <div className={`relative flex border border-gray-200 p-2 rounded-md m-3 ${tab.id === activeTabId ? 'bg-white' : ' bg-gray-200 text-gray-500'} hover:bg-gray-300 cursor-pointer`}>
+              <FormTabs 
+                Icon={tab.icon} 
+                onClick={() => dispatch({type: 'SET_ACTIVE_TAB', payload: {id: tab.id}})}
+                />
+              <span onClick={() => dispatch({type: 'SET_ACTIVE_TAB', payload: {id: tab.id}})}>{tab.title} </span>  
+              {tab.id === activeTabId &&  
+                <div className='flex items-center p-1'>
+                  <MdMoreVert 
+                            size={18} 
+                            onClick={() => handleToggleMenu(tab.id)}/>
+                </div>}
+              {(menuOpenTabId === tab.id && tab.id === activeTabId) && (
+                <TabMenu/>
+              )}
+              </div>
+              <div className="content-center hover:text-black text-white">
+                <button
+                  onClick={() => openNewPageDialog(index+1)}
+                  className='rounded-full border-black border'
+                >
+                +
+              </button>
+            </div>
           </div>
         )}</ReactSortable>
 
@@ -66,6 +79,7 @@ function App() {
         <AddNewPage 
           showDialog={showDialog}
           onClose={() => setShowDialog(false)}
+          insertIndex={insertIndex}
         />
       </div>
     </>
