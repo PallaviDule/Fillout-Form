@@ -8,7 +8,8 @@ export type Action =
   | { type: 'RENAME_ACTIVE_TAB'; payload: { id: string, newTitle: string } }
   | { type: 'REORDER_TABS'; payload: { tabs: Page[] } }
   | { type: 'CLOSE_MENU'}
-  | { type: 'OPEN_MENU'; payload: { id: string }};
+  | { type: 'OPEN_MENU'; payload: { id: string }}
+  | { type: 'SET_AS_FIRST_PAGE'};
 
 
 type ReducerMap = {
@@ -20,6 +21,7 @@ type ReducerMap = {
   REORDER_TABS: (state: TabState, payload: { tabs: Page[] }) => TabState;
   CLOSE_MENU: (state: TabState) => TabState;
   OPEN_MENU: (state: TabState, payload: { id: string }) => TabState;
+  SET_AS_FIRST_PAGE: (state: TabState) => TabState;
 };
 
 const reducerMap : ReducerMap = {
@@ -80,7 +82,22 @@ const reducerMap : ReducerMap = {
       ...state,
       menuOpenTabId: id
     }
-  }
+  }, 
+  SET_AS_FIRST_PAGE: (state: TabState): TabState => {
+  const currentIndex = state.tabs.findIndex(tab => tab.id === state.activeTabId);
+  if (currentIndex === -1) return state;
+
+  const newTabs = [...state.tabs];
+  const [selectedTab] = newTabs.splice(currentIndex, 1);
+  newTabs.unshift(selectedTab);
+
+  return {
+    ...state,
+    tabs: newTabs,
+    activeTabId: selectedTab.id,
+    menuOpenTabId: null
+  };
+}
 };
 
 export function tabReducer(state: TabState, action: Action): TabState {
@@ -101,6 +118,8 @@ export function tabReducer(state: TabState, action: Action): TabState {
       return reducerMap.CLOSE_MENU(state);
     case 'OPEN_MENU':
       return reducerMap.OPEN_MENU(state, action.payload);
+    case 'SET_AS_FIRST_PAGE':
+      return reducerMap.SET_AS_FIRST_PAGE(state);
     default:
       return state;
   }

@@ -36,17 +36,20 @@ const TabMenu = () => {
 
   return (
     <div className="absolute left-0 mt-10 w-40 bg-white border rounded shadow z-10">
-      <div className='border-b border-b-gray-500 font-bold px-1 flex justify-between items-center'>
+      <div className='border-b border-b-gray-500 font-bold px-1 flex justify-between items-center'
+        onClick={() => dispatch({ type: 'CLOSE_MENU' })}
+      >
         <span className="font-bold">Settings</span>
         <MdClose
           size={18}
           className="cursor-pointer text-gray-600 hover:text-black border rounded-md border-gray-300"
-          onClick={() => dispatch({ type: 'CLOSE_MENU' })}
           role="button"
         />
       </div>
 
-      <button className="w-full p-1 hover:bg-gray-100 hover:font-bold flex items-center text-sm group">
+      <button 
+        className="w-full p-1 hover:bg-gray-100 hover:font-bold flex items-center text-sm group"
+        onClick={() => dispatch({type: 'SET_AS_FIRST_PAGE'})}>
         <MdFlag size={18} className="text-gray-500 group-hover:text-blue-700" />
         <span className='px-1'>Set as first page</span>
       </button>
@@ -69,7 +72,7 @@ const TabMenu = () => {
           onClick={() => setIsRenaming(true)}
         >
           <MdDriveFileRenameOutline size={18} className="text-gray-500 group-hover:text-black" />
-          <span className="px-1 group-hover:font-bold"> Rename </span>
+          <span className="px-1 hover:font-bold"> Rename </span>
         </button>
       )}
 
