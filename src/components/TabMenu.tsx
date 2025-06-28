@@ -81,7 +81,8 @@ const TabMenu = () => {
         <span className='px-1'>Copy</span>
       </button>
 
-      <button className="w-full p-1 hover:bg-gray-100 hover:font-bold flex items-center text-sm group">
+      <button className="w-full p-1 hover:bg-gray-100 hover:font-bold flex items-center text-sm group"
+        onClick={() => dispatch({type: 'DUPLICATE_ACTIVE_TAB'})}>
         <MdContentCopy size={18} className="text-gray-500 group-hover:text-black" />
         <span className='px-1'>Duplicate</span>
       </button>

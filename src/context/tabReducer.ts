@@ -9,7 +9,8 @@ export type Action =
   | { type: 'REORDER_TABS'; payload: { tabs: Page[] } }
   | { type: 'CLOSE_MENU'}
   | { type: 'OPEN_MENU'; payload: { id: string }}
-  | { type: 'SET_AS_FIRST_PAGE'};
+  | { type: 'SET_AS_FIRST_PAGE'}
+  | { type: 'DUPLICATE_ACTIVE_TAB' };
 
 
 type ReducerMap = {
@@ -22,6 +23,7 @@ type ReducerMap = {
   CLOSE_MENU: (state: TabState) => TabState;
   OPEN_MENU: (state: TabState, payload: { id: string }) => TabState;
   SET_AS_FIRST_PAGE: (state: TabState) => TabState;
+  DUPLICATE_ACTIVE_TAB: (state: TabState) => TabState;
 };
 
 const reducerMap : ReducerMap = {
@@ -97,6 +99,27 @@ const reducerMap : ReducerMap = {
     activeTabId: selectedTab.id,
     menuOpenTabId: null
   };
+  },
+  DUPLICATE_ACTIVE_TAB: (state: TabState): TabState => {
+  const currentTab = state.tabs.find(tab => tab.id === state.activeTabId);
+  if (!currentTab) return state;
+
+  const newId = (Math.max(...state.tabs.map(t => Number(t.id))) + 1).toString();
+  const duplicatedPage = {
+    ...currentTab,
+    id: newId,
+    title: `Copy of ${currentTab.title}`,
+  };
+
+  const currentIndex = state.tabs.findIndex(tab => tab.id === currentTab.id);
+  const updatedTabs = [...state.tabs];
+  updatedTabs.splice(currentIndex + 1, 0, duplicatedPage); // insert right after original
+
+  return {
+    ...state,
+    tabs: updatedTabs,
+    activeTabId: duplicatedPage.id,
+  };
 }
 };
 
@@ -120,6 +143,8 @@ export function tabReducer(state: TabState, action: Action): TabState {
       return reducerMap.OPEN_MENU(state, action.payload);
     case 'SET_AS_FIRST_PAGE':
       return reducerMap.SET_AS_FIRST_PAGE(state);
+    case 'DUPLICATE_ACTIVE_TAB':
+      return reducerMap.DUPLICATE_ACTIVE_TAB(state);
     default:
       return state;
   }
