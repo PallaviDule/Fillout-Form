@@ -41,7 +41,7 @@ function App() {
           setList={(newTabs) => dispatch({ type: 'REORDER_TABS', payload: { tabs: newTabs } })}
         >         
         {tabs.map((tab, index) => 
-            <div key={tab.id} className='flex '> 
+            <div key={tab.id} className='flex group'> 
               <div className={`relative flex border border-gray-200 p-2 rounded-md m-3 ${tab.id === activeTabId ? 'bg-white' : ' bg-gray-200 text-gray-500'} hover:bg-gray-300 cursor-pointer`}>
               <FormTabs 
                 Icon={tab.icon} 
@@ -58,10 +58,10 @@ function App() {
                 <TabMenu/>
               )}
               </div>
-              <div className="content-center hover:text-black text-white">
+              <div className="content-center invisible group-hover:visible my-2">
                 <button
                   onClick={() => openNewPageDialog(index+1)}
-                  className='rounded-full border-black border'
+                  className='rounded-full border-gray-300 border w-4 h-4 text-[10px]'
                 >
                 +
               </button>
