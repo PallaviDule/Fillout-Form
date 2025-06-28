@@ -17,10 +17,10 @@ export interface TabState {
 }
 
 const initialTabs: Page[] = [
-  { id: '1', title: 'Info', icon: MdOutlineInfo },
-  { id: '2', title: 'Details', icon: MdInsertDriveFile },
-  { id: '3', title: 'Other', icon: MdInsertDriveFile },
-  { id: '4', title: 'Ending', icon: MdCheckCircleOutline },
+  { id: 'tab-1', title: 'Info', icon: MdOutlineInfo },
+  { id: 'tab-2', title: 'Details', icon: MdInsertDriveFile },
+  { id: 'tab-3', title: 'Other', icon: MdInsertDriveFile },
+  { id: 'tab-4', title: 'Ending', icon: MdCheckCircleOutline },
 ];
 
 

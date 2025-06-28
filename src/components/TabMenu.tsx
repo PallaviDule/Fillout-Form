@@ -3,7 +3,7 @@ import {
   MdDriveFileRenameOutline, MdClose, MdFlag
 } from 'react-icons/md';
 import { useTabContext } from '../context/useTabContext';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const TabMenu = () => {
   const { state, dispatch } = useTabContext();
@@ -25,6 +25,19 @@ const TabMenu = () => {
     setIsRenaming(false);
   };
 
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        dispatch({ type: 'CLOSE_MENU' });
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [dispatch]);
+
   const handleRenameKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleRename();
@@ -35,7 +48,7 @@ const TabMenu = () => {
   };
 
   return (
-    <div className="absolute left-0 mt-10 w-40 bg-white border rounded shadow z-10">
+    <div className="absolute left-0 mt-10 w-40 bg-white border rounded shadow z-10" ref={menuRef}>
       <div className='border-b border-b-gray-500 font-bold px-1 flex justify-between items-center'
         onClick={() => dispatch({ type: 'CLOSE_MENU' })}
       >
@@ -48,10 +61,10 @@ const TabMenu = () => {
       </div>
 
       <button 
-        className="w-full p-1 hover:bg-gray-100 hover:font-bold flex items-center text-sm group"
+        className="w-full p-1 hover:bg-gray-100 flex items-center text-sm group"
         onClick={() => dispatch({type: 'SET_AS_FIRST_PAGE'})}>
-        <MdFlag size={18} className="text-gray-500 group-hover:text-blue-700" />
-        <span className='px-1'>Set as first page</span>
+        <MdFlag size={18} className="text-gray-500 group-hover:text-black" />
+        <span className='px-1 group-hover:font-bold'>Set as first page</span>
       </button>
 
       {isRenaming ? (

@@ -9,19 +9,16 @@ interface AddNewPageDialogProps {
 }
 
 const AddNewPage = ({showDialog, onClose, insertIndex}: AddNewPageDialogProps) => {
-    const {state, dispatch} = useTabContext();
+    const {dispatch} = useTabContext();
     const [newTabTitle, setNewTabTitle] = useState<string>('');
 
     if(!showDialog) return null;
 
-    const tabs = state.tabs;
-
     const handleAddPage = () => {
          if (!newTabTitle.trim()) return;
           
-        const newId = (tabs.length + 1).toString();
         const newTab = {
-            id: newId,
+            id: `${newTabTitle.trim()}-${Date.now()}`.toString(),
             title: newTabTitle.trim(),
             icon: MdInsertDriveFile,
         };
