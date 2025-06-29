@@ -27,7 +27,7 @@ type ReducerMap = {
 };
 
 const reducerMap : ReducerMap = {
-  ADD_TAB: (state: TabState, {newPage}): TabState => {
+  ADD_TAB: (state, {newPage}): TabState => {
     return {
       ...state,
       tabs: [...state.tabs, newPage],
@@ -48,13 +48,13 @@ const reducerMap : ReducerMap = {
       pageCount: state.pageCount + 1,
     }
   },
-  SET_ACTIVE_TAB: (state: TabState, {id}): TabState => {
+  SET_ACTIVE_TAB: (state, {id}): TabState => {
     return {
       ...state,
       activeTabId: id,
     };
   },
-  DELETE_ACTIVE_TAB: (state: TabState, {id}): TabState => {
+  DELETE_ACTIVE_TAB: (state, {id}): TabState => {
       const updatedTabs = state.tabs.filter((tab) => tab.id !== id);
 
       return {
@@ -62,30 +62,30 @@ const reducerMap : ReducerMap = {
         tabs: updatedTabs
       }
   },
-  RENAME_ACTIVE_TAB: (state: TabState, {id, newTitle}): TabState => {
+  RENAME_ACTIVE_TAB: (state, {id, newTitle}): TabState => {
      const updatedTabs = state.tabs.map((tab) =>  tab.id === id ? {...tab, title: newTitle} : tab);
       return  {
         ...state,
         tabs: updatedTabs
       }
   },
-  REORDER_TABS: (state: TabState, payload) => ({
+  REORDER_TABS: (state, payload) => ({
     ...state,
     tabs: payload.tabs
   }),
-  CLOSE_MENU : (state: TabState): TabState => {
+  CLOSE_MENU : (state): TabState => {
     return  {
       ...state,
       menuOpenTabId: null
     }
   },
-  OPEN_MENU : (state: TabState, {id}): TabState => {
+  OPEN_MENU : (state, {id}): TabState => {
     return  {
       ...state,
       menuOpenTabId: id
     }
   }, 
-  SET_AS_FIRST_PAGE: (state: TabState): TabState => {
+  SET_AS_FIRST_PAGE: (state): TabState => {
   const currentIndex = state.tabs.findIndex(tab => tab.id === state.activeTabId);
   if (currentIndex === -1) return state;
 
@@ -100,11 +100,11 @@ const reducerMap : ReducerMap = {
     menuOpenTabId: null
   };
   },
-  DUPLICATE_ACTIVE_TAB: (state: TabState): TabState => {
+  DUPLICATE_ACTIVE_TAB: (state): TabState => {
   const currentTab = state.tabs.find(tab => tab.id === state.activeTabId);
   if (!currentTab) return state;
 
-  const newId = (Math.max(...state.tabs.map(t => Number(t.id))) + 1).toString();
+  const newId = `${currentTab.title.trim()}-${Date.now()}`.toString();
   const duplicatedPage = {
     ...currentTab,
     id: newId,
