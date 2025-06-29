@@ -16,7 +16,7 @@ function App() {
   const menuOpenTabId = state.menuOpenTabId;
 
   const handleToggleMenu = (id: string) => {
-      const isMenuOpen = state.menuOpenTabId === id;
+    const isMenuOpen = state.menuOpenTabId === id;
 
     if (isMenuOpen) {
       dispatch({ type: 'CLOSE_MENU' });
@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       <div className='flex'>
-        <div className="flex overflow-x-auto max-w-[90vw] whitespace-nowrap">
+        <div className="flex overflow-x-auto max-w-[90vw] whitespace-nowrap h-100 scrollbar-hidden">
         <ReactSortable
           tag="div"
           className="flex"
@@ -43,7 +43,7 @@ function App() {
         {tabs.map((tab, index) => 
             <div 
               key={tab.id} 
-              className='flex shrink-0'  
+              className='flex shrink-0 h-fit'  
             > 
               <div className={`relative flex border border-gray-200 p-2 rounded-md m-3 ${tab.id === activeTabId ? 'bg-white' : ' bg-gray-200 text-gray-500'} hover:bg-gray-300 cursor-pointer`}>
               <FormTabs 
@@ -77,7 +77,7 @@ function App() {
         </div>
         <button
             onClick={() => setShowDialog(true)}
-            className="p-2 my-3 mx-6 rounded-md border border-b-0 bg-blue-500 text-white hover:bg-blue-700 select-none"
+            className="p-2 my-3 mx-6 rounded-md border border-b-0 bg-blue-500 text-white hover:bg-blue-700 select-none h-fit"
           >
             + Add Page
         </button>
