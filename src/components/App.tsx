@@ -43,8 +43,6 @@ function App() {
             <div 
               key={tab.id} 
               className='flex'  
-              onMouseEnter={() => setHoveredTabIndex(index)}
-              onMouseLeave={() => setHoveredTabIndex(null)}
             > 
               <div className={`relative flex border border-gray-200 p-2 rounded-md m-3 ${tab.id === activeTabId ? 'bg-white' : ' bg-gray-200 text-gray-500'} hover:bg-gray-300 cursor-pointer`}>
               <FormTabs 

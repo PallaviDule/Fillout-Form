@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import { useTabContext } from '../context/useTabContext';
 import {MdInsertDriveFile, MdClose} from 'react-icons/md';
 
